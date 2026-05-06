@@ -97,3 +97,27 @@ Simulated `0506185GHzmodel - 副本` with `--as-is`. Results vs final 12g design
 
 185g model has better S11 and IL but insufficient LPF stopband suppression due to narrower capacitor widths (1.0/0.9 mm vs 1.45 mm).
 
+## 185 GHz Optimised Design — Case 024
+
+Optimised `0506185GHzmodel - 副本` over 4 rounds / 26 cases. All primary targets met. Stored in `0506185GHzmodel - 副本/final/`.
+
+>| Metric | **024 (optimised)** | baseline | Target |
+>|--------|---------------------|----------|--------|
+>| Crossing freq | **18.535 GHz** | 18.504 GHz | ≥ 18.5 GHz ✓ |
+>| S31 @ 19 GHz | **−10.3 dB** | −7.9 dB | ≤ −10 dB ✓ |
+>| S31 @ 20 GHz | **−11.9 dB** | −8.1 dB | ≤ −10 dB ✓ |
+>| Passband ripple 20–25 GHz | **0.56 dB** | 0.87 dB | ≤ 1 dB ✓ |
+>| Min IL (20 GHz+) | **−1.3 dB** | −1.6 dB | — (improved) |
+>| S11 worst (19–25 GHz) | −7.2 dB | −7.0 dB | — |
+
+Key parameters vs baseline:
+
+| Parameter | Optimised | Baseline | Role |
+|-----------|-----------|----------|------|
+| `w_C4185g` | 1.15 mm | 1.0 mm | LPF capacitor width → S31 |
+| `w_C2185g` | 1.05 mm | 0.9 mm | LPF capacitor width → S31 |
+| `L2_g3185g` | **0.78 mm** | 0.85 mm | HPF stub → crossing freq ← key breakthrough |
+| `k` (LPF scale) | **0.96** | 1.0 | LPF element lengths × 0.96 |
+
+Optimisation log: `0506185GHzmodel - 副本/TUNING_LOG.md`
+

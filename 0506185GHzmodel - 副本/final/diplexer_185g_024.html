@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[024] WINNER k=0.96 wC4=1.15 wC2=1.05 L2g3=0.78  cross=18.535 S31@19=-10.3dB</title>
+<style>
+  :root {
+    --bg:        #FAF9F6;
+    --bg-panel:  #FFFFFF;
+    --border:    #E8E5DF;
+    --grid:      #EAE8E3;
+    --text:      #1A1916;
+    --text-muted:#7A786F;
+    --orange:    #E8670A;
+    --orange-lt: #FDF0E6;
+    --s21:       #2C2C2C;
+    --s31:       #E8670A;
+    --s11:       #9E9B94;
+    --pass:      #2D6A4F;
+    --pass-bg:   #D8F3DC;
+    --fail:      #C0392B;
+    --fail-bg:   #FDECEA;
+    --info-bg:   #EEF1F6;
+    --info:      #2F4A7A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', 'SF Pro Display', -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  header {
+    padding: 12px 20px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-panel);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-size: 16px;
+    font-weight: 650;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  header .sub {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ── Metrics bar ── */
+  .metrics-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 20px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .badge {
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 4px 11px;
+    border-radius: 99px;
+    letter-spacing: 0.05px;
+  }
+  .badge-pass { background: var(--pass-bg);  color: var(--pass); }
+  .badge-fail { background: var(--fail-bg);  color: var(--fail); }
+  .badge-info { background: var(--info-bg);  color: var(--info); }
+
+  /* ── Chart area ── */
+  .chart-wrap {
+    flex: 1;
+    position: relative;
+    min-height: 0;
+    padding: 8px 16px 4px 8px;
+  }
+  svg#chart {
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    display: block;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding: 6px 0 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    border-top: 1px solid var(--border);
+    background: var(--bg-panel);
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-swatch {
+    width: 22px; height: 2.5px; border-radius: 2px; flex-shrink: 0;
+  }
+  .legend-swatch.dashed {
+    background: repeating-linear-gradient(
+      to right, var(--s11) 0 4px, transparent 4px 7px);
+  }
+
+  /* readout is SVG-native — no CSS needed */
+</style>
+</head>
+<body>
+
+<header>
+  <h1>[024] WINNER k=0.96 wC4=1.15 wC2=1.05 L2g3=0.78  cross=18.535 S31@19=-10.3dB</h1>
+  <span class="sub">Drag to inspect · S-Parameters 0–40 GHz</span>
+</header>
+
+<div class="metrics-bar">
+  
+      <span class="badge badge-pass">✓ Cross 18.535 GHz</span>
+      <span class="badge badge-pass">✓ S31@19 = -10.3 dB</span>
+      <span class="badge badge-pass">✓ S31@20 = -11.9 dB</span>
+      <span class="badge badge-pass">✓ Ripple 0.56 dB</span>
+      <span class="badge badge-info">IL -1.3 dB</span>
+    
+</div>
+
+<div class="chart-wrap" id="chartWrap">
+  <svg id="chart" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:var(--s21)"></div>S21 — HPF passband
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:var(--s31)"></div>S31 — LPF arm
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch dashed"></div>S11 — Return loss
+  </div>
+</div>
+
+<script>
+const DATA = {"fr": [5.0, 5.075, 5.15, 5.225, 5.3, 5.375, 5.45, 5.525, 5.6, 5.675, 5.75, 5.825, 5.9, 5.975, 6.05, 6.125, 6.2, 6.275, 6.35, 6.425, 6.5, 6.575, 6.65, 6.725, 6.8, 6.875, 6.95, 7.025, 7.1, 7.175, 7.25, 7.325, 7.4, 7.475, 7.55, 7.625, 7.7, 7.775, 7.85, 7.925, 8.0, 8.075, 8.15, 8.225, 8.3, 8.375, 8.45, 8.525, 8.6, 8.675, 8.75, 8.825, 8.9, 8.975, 9.05, 9.125, 9.2, 9.275, 9.35, 9.425, 9.5, 9.575, 9.65, 9.725, 9.8, 9.875, 9.95, 10.025, 10.1, 10.175, 10.25, 10.325, 10.4, 10.475, 10.55, 10.625, 10.7, 10.775, 10.85, 10.925, 11.0, 11.075, 11.15, 11.225, 11.3, 11.375, 11.45, 11.525, 11.6, 11.675, 11.75, 11.825, 11.9, 11.975, 12.05, 12.125, 12.2, 12.275, 12.35, 12.425, 12.5, 12.575, 12.65, 12.725, 12.8, 12.875, 12.95, 13.025, 13.1, 13.175, 13.25, 13.325, 13.4, 13.475, 13.55, 13.625, 13.7, 13.775, 13.85, 13.925, 14.0, 14.075, 14.15, 14.225, 14.3, 14.375, 14.45, 14.525, 14.6, 14.675, 14.75, 14.825, 14.9, 14.975, 15.05, 15.125, 15.2, 15.275, 15.35, 15.425, 15.5, 15.575, 15.65, 15.725, 15.8, 15.875, 15.95, 16.025, 16.1, 16.175, 16.25, 16.325, 16.4, 16.475, 16.55, 16.625, 16.7, 16.775, 16.85, 16.925, 17.0, 17.075, 17.15, 17.225, 17.3, 17.375, 17.45, 17.525, 17.6, 17.675, 17.75, 17.825, 17.9, 17.975, 18.05, 18.125, 18.2, 18.275, 18.35, 18.425, 18.5, 18.575, 18.65, 18.725, 18.8, 18.875, 18.95, 19.025, 19.1, 19.175, 19.25, 19.325, 19.4, 19.475, 19.55, 19.625, 19.7, 19.775, 19.85, 19.925, 20.0, 20.075, 20.15, 20.225, 20.3, 20.375, 20.45, 20.525, 20.6, 20.675, 20.75, 20.825, 20.9, 20.975, 21.05, 21.125, 21.2, 21.275, 21.35, 21.425, 21.5, 21.575, 21.65, 21.725, 21.8, 21.875, 21.95, 22.025, 22.1, 22.175, 22.25, 22.325, 22.4, 22.475, 22.55, 22.625, 22.7, 22.775, 22.85, 22.925, 23.0, 23.075, 23.15, 23.225, 23.3, 23.375, 23.45, 23.525, 23.6, 23.675, 23.75, 23.825, 23.9, 23.975, 24.05, 24.125, 24.2, 24.275, 24.35, 24.425, 24.5, 24.575, 24.65, 24.725, 24.8, 24.875, 24.95, 25.025, 25.1, 25.175, 25.25, 25.325, 25.4, 25.475, 25.55, 25.625, 25.7, 25.775, 25.85, 25.925, 26.0, 26.075, 26.15, 26.225, 26.3, 26.375, 26.45, 26.525, 26.6, 26.675, 26.75, 26.825, 26.9, 26.975, 27.05, 27.125, 27.2, 27.275, 27.35, 27.425, 27.5, 27.575, 27.65, 27.725, 27.8, 27.875, 27.95, 28.025, 28.1, 28.175, 28.25, 28.325, 28.4, 28.475, 28.55, 28.625, 28.7, 28.775, 28.85, 28.925, 29.0, 29.075, 29.15, 29.225, 29.3, 29.375, 29.45, 29.525, 29.6, 29.675, 29.75, 29.825, 29.9, 29.975, 30.05, 30.125, 30.2, 30.275, 30.35, 30.425, 30.5, 30.575, 30.65, 30.725, 30.8, 30.875, 30.95, 31.025, 31.1, 31.175, 31.25, 31.325, 31.4, 31.475, 31.55, 31.625, 31.7, 31.775, 31.85, 31.925, 32.0, 32.075, 32.15, 32.225, 32.3, 32.375, 32.45, 32.525, 32.6, 32.675, 32.75, 32.825, 32.9, 32.975, 33.05, 33.125, 33.2, 33.275, 33.35, 33.425, 33.5, 33.575, 33.65, 33.725, 33.8, 33.875, 33.95, 34.025, 34.1, 34.175, 34.25, 34.325, 34.4, 34.475, 34.55, 34.625, 34.7, 34.775, 34.85, 34.925, 35.0], "s11": [-16.299, -16.222, -16.147, -16.076, -16.008, -15.944, -15.882, -15.823, -15.767, -15.714, -15.663, -15.616, -15.572, -15.53, -15.492, -15.456, -15.423, -15.393, -15.365, -15.341, -15.319, -15.3, -15.284, -15.271, -15.26, -15.253, -15.248, -15.246, -15.246, -15.25, -15.256, -15.265, -15.277, -15.292, -15.309, -15.329, -15.352, -15.378, -15.406, -15.438, -15.471, -15.508, -15.547, -15.589, -15.633, -15.68, -15.729, -15.781, -15.835, -15.891, -15.949, -16.009, -16.07, -16.134, -16.198, -16.264, -16.331, -16.398, -16.466, -16.534, -16.601, -16.668, -16.733, -16.797, -16.859, -16.918, -16.974, -17.026, -17.074, -17.116, -17.153, -17.184, -17.208, -17.224, -17.232, -17.231, -17.221, -17.202, -17.172, -17.133, -17.083, -17.023, -16.952, -16.871, -16.78, -16.68, -16.57, -16.451, -16.325, -16.191, -16.049, -15.902, -15.749, -15.591, -15.429, -15.263, -15.094, -14.924, -14.751, -14.578, -14.404, -14.23, -14.056, -13.883, -13.712, -13.542, -13.374, -13.209, -13.046, -12.886, -12.73, -12.576, -12.426, -12.28, -12.138, -12.001, -11.867, -11.738, -11.613, -11.493, -11.378, -11.268, -11.164, -11.064, -10.97, -10.882, -10.799, -10.723, -10.652, -10.588, -10.531, -10.48, -10.437, -10.401, -10.372, -10.352, -10.34, -10.337, -10.343, -10.36, -10.387, -10.425, -10.476, -10.539, -10.617, -10.71, -10.82, -10.949, -11.098, -11.27, -11.467, -11.694, -11.952, -12.248, -12.588, -12.977, -13.427, -13.948, -14.557, -15.275, -16.132, -17.173, -18.465, -20.124, -22.366, -25.671, -31.525, -41.229, -29.426, -23.734, -20.144, -17.509, -15.429, -13.722, -12.29, -11.08, -10.055, -9.194, -8.481, -7.905, -7.456, -7.126, -6.908, -6.794, -6.777, -6.851, -7.011, -7.253, -7.574, -7.973, -8.451, -9.009, -9.654, -10.391, -11.233, -12.196, -13.302, -14.585, -16.096, -17.919, -20.192, -23.184, -27.432, -33.114, -31.316, -26.148, -22.666, -20.203, -18.337, -16.856, -15.643, -14.626, -13.759, -13.012, -12.361, -11.79, -11.287, -10.84, -10.443, -10.089, -9.773, -9.49, -9.236, -9.01, -8.808, -8.627, -8.467, -8.325, -8.2, -8.09, -7.995, -7.913, -7.845, -7.788, -7.742, -7.708, -7.683, -7.669, -7.663, -7.668, -7.681, -7.703, -7.733, -7.772, -7.819, -7.874, -7.938, -8.01, -8.09, -8.179, -8.276, -8.382, -8.496, -8.619, -8.752, -8.893, -9.045, -9.207, -9.379, -9.561, -9.756, -9.962, -10.18, -10.411, -10.657, -10.916, -11.192, -11.483, -11.793, -12.121, -12.47, -12.841, -13.236, -13.658, -14.109, -14.592, -15.111, -15.67, -16.276, -16.934, -17.653, -18.444, -19.322, -20.305, -21.42, -22.705, -24.218, -26.053, -28.379, -31.54, -36.397, -44.483, -39.237, -33.209, -29.556, -26.98, -24.998, -23.393, -22.047, -20.891, -19.879, -18.981, -18.177, -17.448, -16.785, -16.176, -15.615, -15.096, -14.614, -14.165, -13.745, -13.351, -12.982, -12.634, -12.307, -11.998, -11.706, -11.43, -11.168, -10.92, -10.685, -10.462, -10.25, -10.048, -9.857, -9.675, -9.502, -9.337, -9.181, -9.032, -8.89, -8.755, -8.627, -8.506, -8.39, -8.28, -8.176, -8.077, -7.984, -7.895, -7.811, -7.732, -7.658, -7.587, -7.522, -7.46, -7.402, -7.348, -7.299, -7.252, -7.21, -7.171, -7.136, -7.104, -7.075, -7.05, -7.029, -7.01, -6.995, -6.983, -6.974, -6.968, -6.966, -6.966, -6.97, -6.977, -6.987, -7.0, -7.016, -7.036, -7.058, -7.084, -7.113, -7.145, -7.18, -7.219, -7.261, -7.306, -7.354, -7.406, -7.461, -7.519, -7.581, -7.646, -7.714, -7.785, -7.86, -7.937, -8.017, -8.1, -8.185, -8.272, -8.36, -8.45, -8.54, -8.63, -8.719, -8.805, -8.889, -8.968, -9.041], "s21": [-88.566, -88.329, -88.103, -87.888, -87.684, -87.49, -87.308, -87.137, -86.978, -86.831, -86.696, -86.574, -86.465, -86.37, -86.29, -86.226, -86.177, -86.146, -86.134, -86.142, -86.172, -86.225, -86.304, -86.413, -86.553, -86.73, -86.947, -87.211, -87.529, -87.912, -88.37, -88.92, -89.584, -90.395, -91.398, -92.666, -94.326, -96.621, -100.124, -106.862, -114.503, -101.888, -96.449, -92.88, -90.167, -87.947, -86.047, -84.372, -82.864, -81.485, -80.208, -79.015, -77.89, -76.824, -75.808, -74.835, -73.9, -72.998, -72.127, -71.281, -70.46, -69.661, -68.881, -68.12, -67.375, -66.646, -65.932, -65.231, -64.543, -63.866, -63.201, -62.546, -61.901, -61.266, -60.64, -60.022, -59.413, -58.811, -58.217, -57.631, -57.051, -56.479, -55.912, -55.353, -54.799, -54.252, -53.71, -53.174, -52.643, -52.118, -51.599, -51.084, -50.575, -50.07, -49.571, -49.076, -48.586, -48.1, -47.619, -47.143, -46.671, -46.203, -45.74, -45.28, -44.825, -44.374, -43.927, -43.484, -43.045, -42.61, -42.179, -41.751, -41.328, -40.907, -40.491, -40.078, -39.669, -39.263, -38.86, -38.461, -38.065, -37.672, -37.282, -36.896, -36.512, -36.132, -35.754, -35.379, -35.006, -34.636, -34.268, -33.902, -33.537, -33.175, -32.814, -32.453, -32.094, -31.735, -31.375, -31.015, -30.653, -30.289, -29.922, -29.551, -29.175, -28.792, -28.402, -28.003, -27.592, -27.168, -26.729, -26.273, -25.798, -25.3, -24.778, -24.23, -23.654, -23.048, -22.411, -21.742, -21.041, -20.308, -19.545, -18.754, -17.936, -17.095, -16.234, -15.358, -14.471, -13.578, -12.686, -11.799, -10.925, -10.07, -9.242, -8.447, -7.691, -6.981, -6.32, -5.711, -5.157, -4.655, -4.206, -3.804, -3.448, -3.132, -2.852, -2.604, -2.383, -2.187, -2.012, -1.855, -1.715, -1.59, -1.479, -1.38, -1.292, -1.215, -1.148, -1.091, -1.042, -1.002, -0.97, -0.944, -0.926, -0.913, -0.907, -0.905, -0.908, -0.915, -0.925, -0.938, -0.954, -0.971, -0.991, -1.011, -1.032, -1.054, -1.076, -1.098, -1.119, -1.14, -1.16, -1.179, -1.197, -1.214, -1.229, -1.243, -1.255, -1.266, -1.275, -1.283, -1.288, -1.292, -1.295, -1.295, -1.294, -1.291, -1.287, -1.281, -1.273, -1.264, -1.254, -1.242, -1.229, -1.214, -1.198, -1.181, -1.163, -1.144, -1.124, -1.103, -1.082, -1.059, -1.036, -1.012, -0.988, -0.963, -0.938, -0.913, -0.887, -0.862, -0.836, -0.81, -0.785, -0.759, -0.734, -0.709, -0.685, -0.661, -0.638, -0.615, -0.593, -0.571, -0.55, -0.531, -0.512, -0.494, -0.476, -0.46, -0.445, -0.431, -0.418, -0.407, -0.396, -0.387, -0.379, -0.372, -0.366, -0.362, -0.359, -0.357, -0.356, -0.356, -0.358, -0.361, -0.365, -0.37, -0.376, -0.383, -0.392, -0.401, -0.411, -0.423, -0.435, -0.448, -0.462, -0.477, -0.492, -0.508, -0.525, -0.543, -0.561, -0.579, -0.598, -0.617, -0.637, -0.657, -0.677, -0.698, -0.718, -0.739, -0.76, -0.781, -0.802, -0.823, -0.844, -0.865, -0.885, -0.906, -0.926, -0.946, -0.965, -0.985, -1.004, -1.022, -1.04, -1.058, -1.075, -1.092, -1.108, -1.123, -1.138, -1.153, -1.167, -1.18, -1.192, -1.204, -1.215, -1.225, -1.235, -1.244, -1.252, -1.26, -1.266, -1.272, -1.277, -1.282, -1.285, -1.288, -1.29, -1.291, -1.291, -1.291, -1.289, -1.287, -1.284, -1.281, -1.276, -1.271, -1.265, -1.259, -1.251, -1.243, -1.235, -1.225, -1.216, -1.205, -1.194, -1.182, -1.17, -1.158, -1.145, -1.132, -1.118, -1.105, -1.091, -1.077, -1.063, -1.049, -1.035, -1.021, -1.007, -0.994, -0.981, -0.969, -0.958, -0.947, -0.937, -0.928, -0.921], "s31": [-0.166, -0.169, -0.171, -0.174, -0.176, -0.179, -0.181, -0.184, -0.186, -0.188, -0.19, -0.192, -0.194, -0.196, -0.198, -0.2, -0.201, -0.203, -0.205, -0.206, -0.208, -0.209, -0.21, -0.211, -0.212, -0.213, -0.214, -0.215, -0.216, -0.216, -0.217, -0.218, -0.218, -0.218, -0.218, -0.219, -0.219, -0.219, -0.219, -0.219, -0.218, -0.218, -0.218, -0.217, -0.217, -0.216, -0.216, -0.215, -0.215, -0.214, -0.213, -0.212, -0.212, -0.211, -0.21, -0.209, -0.209, -0.208, -0.207, -0.206, -0.206, -0.205, -0.205, -0.204, -0.204, -0.203, -0.203, -0.203, -0.203, -0.203, -0.203, -0.203, -0.204, -0.204, -0.205, -0.206, -0.207, -0.209, -0.21, -0.212, -0.214, -0.216, -0.219, -0.221, -0.224, -0.228, -0.231, -0.235, -0.239, -0.243, -0.248, -0.253, -0.258, -0.264, -0.269, -0.276, -0.282, -0.289, -0.296, -0.303, -0.311, -0.319, -0.327, -0.336, -0.344, -0.353, -0.363, -0.372, -0.382, -0.392, -0.402, -0.412, -0.423, -0.433, -0.444, -0.455, -0.465, -0.476, -0.487, -0.498, -0.508, -0.519, -0.529, -0.539, -0.549, -0.559, -0.568, -0.578, -0.586, -0.594, -0.602, -0.609, -0.616, -0.622, -0.627, -0.632, -0.636, -0.639, -0.641, -0.642, -0.642, -0.642, -0.64, -0.637, -0.633, -0.628, -0.622, -0.615, -0.607, -0.598, -0.587, -0.576, -0.564, -0.551, -0.538, -0.524, -0.511, -0.498, -0.485, -0.475, -0.466, -0.46, -0.458, -0.462, -0.473, -0.493, -0.524, -0.568, -0.631, -0.714, -0.823, -0.963, -1.14, -1.359, -1.628, -1.952, -2.338, -2.79, -3.314, -3.909, -4.576, -5.31, -6.103, -6.942, -7.809, -8.68, -9.522, -10.3, -10.976, -11.521, -11.917, -12.169, -12.295, -12.325, -12.29, -12.219, -12.134, -12.051, -11.982, -11.933, -11.907, -11.908, -11.934, -11.987, -12.065, -12.167, -12.292, -12.438, -12.604, -12.789, -12.99, -13.207, -13.439, -13.684, -13.94, -14.208, -14.486, -14.773, -15.069, -15.372, -15.682, -15.998, -16.319, -16.646, -16.976, -17.311, -17.648, -17.989, -18.332, -18.676, -19.022, -19.368, -19.715, -20.061, -20.406, -20.75, -21.092, -21.431, -21.767, -22.098, -22.425, -22.745, -23.06, -23.367, -23.666, -23.955, -24.235, -24.504, -24.762, -25.008, -25.24, -25.46, -25.666, -25.857, -26.035, -26.198, -26.347, -26.482, -26.604, -26.713, -26.81, -26.895, -26.969, -27.033, -27.088, -27.135, -27.175, -27.208, -27.236, -27.259, -27.278, -27.293, -27.306, -27.318, -27.328, -27.337, -27.346, -27.355, -27.365, -27.376, -27.388, -27.402, -27.417, -27.435, -27.455, -27.477, -27.502, -27.53, -27.56, -27.594, -27.63, -27.669, -27.711, -27.757, -27.805, -27.856, -27.911, -27.968, -28.028, -28.092, -28.158, -28.227, -28.299, -28.374, -28.451, -28.531, -28.614, -28.699, -28.787, -28.877, -28.969, -29.064, -29.16, -29.259, -29.36, -29.463, -29.568, -29.675, -29.783, -29.893, -30.005, -30.118, -30.232, -30.348, -30.466, -30.584, -30.704, -30.825, -30.947, -31.069, -31.193, -31.318, -31.443, -31.569, -31.696, -31.823, -31.951, -32.079, -32.208, -32.336, -32.466, -32.595, -32.724, -32.853, -32.983, -33.112, -33.241, -33.37, -33.498, -33.626, -33.753, -33.88, -34.006, -34.131, -34.256, -34.379, -34.501, -34.622, -34.742, -34.86, -34.977, -35.092, -35.205, -35.316, -35.425, -35.532, -35.637, -35.739, -35.838, -35.934, -36.028, -36.118, -36.205, -36.289, -36.369, -36.445, -36.518, -36.586, -36.65, -36.71, -36.765, -36.816, -36.862, -36.903, -36.94, -36.971, -36.998, -37.02, -37.036, -37.048, -37.055, -37.057, -37.054, -37.047, -37.035, -37.018, -36.997, -36.972, -36.943, -36.911, -36.875]};
+const METRICS = {"crossing_GHz": 18.5353, "S31_at_19GHz_dB": -10.3, "S31_at_20GHz_dB": -11.91, "ripple_20_25GHz_dB": 0.56, "min_IL_20plus_dB": -1.27, "S11_worst_19_25GHz_dB": -7.25, "targets_met": {"crossing_ge_18p5GHz": true, "S31_at_19_le_neg10dB": true, "S31_at_20_le_neg10dB": true, "ripple_20_25GHz_le_1dB": true}};
+
+const FMIN = 0, FMAX = 40, YMIN = -40, YMAX = 5;
+
+const svg    = document.getElementById('chart');
+const wrap   = document.getElementById('chartWrap');
+let rdGrp = null;
+
+let ML = 58, MR = 16, MT = 12, MB = 40;
+let PW, PH, W, H;
+
+function recompute() {
+  const r = svg.getBoundingClientRect();
+  W = r.width; H = r.height;
+  PW = W - ML - MR;
+  PH = H - MT - MB;
+}
+
+const px = f => ML + (f - FMIN) / (FMAX - FMIN) * PW;
+const py = y => MT + (YMAX - y) / (YMAX - YMIN) * PH;
+const fx = x => FMIN + (x - ML) / PW * (FMAX - FMIN);
+
+function interp(f) {
+  const fr = DATA.fr;
+  let lo = 0;
+  for (let i = 1; i < fr.length; i++) {
+    if (fr[i] >= f) { lo = i - 1; break; }
+    lo = i;
+  }
+  const hi = Math.min(lo + 1, fr.length - 1);
+  const t = fr[hi] === fr[lo] ? 0 : (f - fr[lo]) / (fr[hi] - fr[lo]);
+  const lerp = (a, k) => a[lo] + t * (a[k] - a[lo]);  // unused, using hi
+  const lerp2 = arr => arr[lo] + t * (arr[hi] - arr[lo]);
+  return { s11: lerp2(DATA.s11), s21: lerp2(DATA.s21), s31: lerp2(DATA.s31) };
+}
+
+function polylinePoints(fArr, yArr) {
+  return fArr.map((f, i) => {
+    const x = px(f), y = Math.max(MT - 2, Math.min(MT + PH + 2, py(yArr[i])));
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+}
+
+function mkEl(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+let cursorLine = null;
+let isDragging = false;
+
+function build() {
+  recompute();
+  svg.innerHTML = '';
+
+  // Background
+  svg.appendChild(mkEl('rect', {x:0, y:0, width:W, height:H, fill:'#FAF9F6'}));
+
+  // Plot area background
+  svg.appendChild(mkEl('rect', {x:ML, y:MT, width:PW, height:PH, fill:'#FFFFFF',
+    rx:2, stroke:'#E8E5DF', 'stroke-width':1}));
+
+  // Passband shading 18.5–40 GHz
+  svg.appendChild(mkEl('rect', {
+    x: px(18.5).toFixed(1), y: MT, width: (px(40)-px(18.5)).toFixed(1), height: PH,
+    fill: '#FDF0E6', opacity: 0.5
+  }));
+
+  // Grid & Y axis
+  for (let y = YMIN; y <= YMAX; y += 5) {
+    const yp = py(y).toFixed(1);
+    const isZero = y === 0;
+    svg.appendChild(mkEl('line', {
+      x1:ML, y1:yp, x2:ML+PW, y2:yp,
+      stroke: isZero ? '#C8C5BE' : '#EAE8E3',
+      'stroke-width': isZero ? 1 : 0.8
+    }));
+    const t = mkEl('text', {
+      x: (ML-8).toFixed(1), y: (parseFloat(yp)+4).toFixed(1),
+      'text-anchor':'end', fill:'#9E9B94',
+      'font-size':12, 'font-weight':700, 'font-family':"'Roboto Mono','Consolas',monospace"
+    });
+    t.textContent = y;
+    svg.appendChild(t);
+  }
+
+  // Grid & X axis
+  for (let f = 0; f <= 40; f += 5) {
+    const xp = px(f).toFixed(1);
+    svg.appendChild(mkEl('line', {
+      x1:xp, y1:MT, x2:xp, y2:MT+PH,
+      stroke:'#EAE8E3', 'stroke-width':0.8
+    }));
+    const t = mkEl('text', {
+      x:xp, y:(MT+PH+20).toFixed(1),
+      'text-anchor':'middle', fill:'#9E9B94',
+      'font-size':12, 'font-weight':700, 'font-family':"'Roboto Mono','Consolas',monospace"
+    });
+    t.textContent = f;
+    svg.appendChild(t);
+  }
+
+  // 18.5 GHz reference
+  const x185 = px(18.5).toFixed(1);
+  svg.appendChild(mkEl('line', {
+    x1:x185, y1:MT, x2:x185, y2:MT+PH,
+    stroke:'#E8670A', 'stroke-width':1.2,
+    'stroke-dasharray':'6 3', opacity:0.45
+  }));
+  const t185 = mkEl('text', {
+    x:(parseFloat(x185)+5).toFixed(1), y:(MT+15).toFixed(1),
+    fill:'#E8670A', 'font-size':11.5, 'font-weight':700, 'font-family':"'Roboto Mono','Consolas',monospace", opacity:0.75
+  });
+  t185.textContent = '18.5 GHz';
+  svg.appendChild(t185);
+
+  // -10 dB reference
+  const yn10 = py(-10).toFixed(1);
+  svg.appendChild(mkEl('line', {
+    x1:ML, y1:yn10, x2:ML+PW, y2:yn10,
+    stroke:'#C8A882', 'stroke-width':1,
+    'stroke-dasharray':'4 3', opacity:0.5
+  }));
+  const tn10 = mkEl('text', {
+    x:(ML+6).toFixed(1), y:(parseFloat(yn10)-5).toFixed(1),
+    fill:'#C8A882', 'font-size':11.5, 'font-weight':700, 'font-family':"'Roboto Mono','Consolas',monospace", opacity:0.8
+  });
+  tn10.textContent = '−10 dB';
+  svg.appendChild(tn10);
+
+  // -1 dB reference
+  const yn1 = py(-1).toFixed(1);
+  svg.appendChild(mkEl('line', {
+    x1:ML, y1:yn1, x2:ML+PW, y2:yn1,
+    stroke:'#B8B5AE', 'stroke-width':0.8,
+    'stroke-dasharray':'3 4', opacity:0.45
+  }));
+
+  // Traces
+  // S11 (dashed, light grey)
+  const pl11 = mkEl('polyline', {
+    points: polylinePoints(DATA.fr, DATA.s11),
+    fill:'none', stroke:'#B8B5AE', 'stroke-width':1.5,
+    'stroke-dasharray':'5 3'
+  });
+  svg.appendChild(pl11);
+
+  // S31 (orange)
+  const pl31 = mkEl('polyline', {
+    points: polylinePoints(DATA.fr, DATA.s31),
+    fill:'none', stroke:'#E8670A', 'stroke-width':2.4
+  });
+  svg.appendChild(pl31);
+
+  // S21 (dark, primary)
+  const pl21 = mkEl('polyline', {
+    points: polylinePoints(DATA.fr, DATA.s21),
+    fill:'none', stroke:'#2C2C2C', 'stroke-width':2.4
+  });
+  svg.appendChild(pl21);
+
+  // Crossing marker
+  const fc = METRICS.crossing_GHz;
+  if (fc) {
+    const cx = px(fc), cy = py(interp(fc).s21);
+    const circ = mkEl('circle', {
+      cx:cx.toFixed(1), cy:cy.toFixed(1), r:4.5,
+      fill:'#FAF9F6', stroke:'#E8670A', 'stroke-width':1.8
+    });
+    svg.appendChild(circ);
+    const ct = mkEl('text', {
+      x:(cx+8).toFixed(1), y:(cy-7).toFixed(1),
+      fill:'#E8670A', 'font-size':12, 'font-family':"'Roboto Mono','Consolas',monospace", 'font-weight':700
+    });
+    ct.textContent = fc.toFixed(3) + ' GHz';
+    svg.appendChild(ct);
+  }
+
+  // Axis label Y
+  const axY = mkEl('text', {
+    x:14, y:(MT+PH/2).toFixed(1),
+    'text-anchor':'middle', fill:'#9E9B94', 'font-size':12.5, 'font-weight':700,
+    'font-family':"'Inter','Segoe UI',sans-serif",
+    transform:`rotate(-90,14,${(MT+PH/2).toFixed(1)})`
+  });
+  axY.textContent = 'S-parameters (dB)';
+  svg.appendChild(axY);
+
+  // Axis label X
+  const axX = mkEl('text', {
+    x:(ML+PW/2).toFixed(1), y:(H-6).toFixed(1),
+    'text-anchor':'middle', fill:'#9E9B94', 'font-size':12.5, 'font-weight':700,
+    'font-family':"'Inter','Segoe UI',sans-serif"
+  });
+  axX.textContent = 'Frequency (GHz)';
+  svg.appendChild(axX);
+
+  // Cursor line
+  cursorLine = mkEl('line', {
+    x1:0, y1:MT, x2:0, y2:MT+PH,
+    stroke:'#E8670A', 'stroke-width':1.5, opacity:0,
+    'pointer-events':'none'
+  });
+  svg.appendChild(cursorLine);
+
+  // SVG-native readout box
+  const RD_W2 = 192, RD_H2 = 104;
+  const MONO = "'Roboto Mono','Consolas',monospace";
+  const SANS = "'Inter','Segoe UI',sans-serif";
+  rdGrp = mkEl('g', {opacity:0, 'pointer-events':'none'});
+  rdGrp.appendChild(mkEl('rect', {
+    x:0, y:0, width:RD_W2, height:RD_H2,
+    rx:9, fill:'white', 'fill-opacity':0.45,
+    stroke:'#D8D5CF', 'stroke-width':1, 'stroke-opacity':0.8
+  }));
+  rdGrp.appendChild(mkEl('line', {
+    x1:10, y1:32, x2:RD_W2-10, y2:32,
+    stroke:'#E8E5DF', 'stroke-width':1
+  }));
+  const roFreq = mkEl('text', {
+    id:'ro-freq', x:10, y:23,
+    fill:'#E8670A', 'font-size':14, 'font-weight':700, 'font-family':MONO
+  });
+  roFreq.textContent = '—';
+  rdGrp.appendChild(roFreq);
+  const rows = [
+    {id:'ro-s21', label:'S21', color:'#2C2C2C', y:54},
+    {id:'ro-s31', label:'S31', color:'#E8670A', y:74},
+    {id:'ro-s11', label:'S11', color:'#9E9B94', y:94},
+  ];
+  rows.forEach(r => {
+    const lbl = mkEl('text', {
+      x:10, y:r.y, fill:'#9E9B94', 'font-size':12.5, 'font-weight':700, 'font-family':SANS
+    });
+    lbl.textContent = r.label;
+    const val = mkEl('text', {
+      id:r.id, x:RD_W2-10, y:r.y,
+      'text-anchor':'end', fill:r.color,
+      'font-size':13.5, 'font-weight':800, 'font-family':MONO
+    });
+    val.textContent = '—';
+    rdGrp.appendChild(lbl);
+    rdGrp.appendChild(val);
+  });
+  svg.appendChild(rdGrp);
+}
+
+const RD_W = 192, RD_H = 104, RD_GAP = 14;
+
+function updateCursor(clientX) {
+  if (!rdGrp) return;
+  const svgRect = svg.getBoundingClientRect();
+  const x = clientX - svgRect.left;
+  const f = Math.max(FMIN, Math.min(FMAX, fx(x)));
+  const cx = px(f);
+
+  cursorLine.setAttribute('x1', cx.toFixed(1));
+  cursorLine.setAttribute('x2', cx.toFixed(1));
+  cursorLine.setAttribute('opacity', 0.75);
+
+  // Position readout in SVG coords — flip left when near right edge
+  const showLeft = (cx + RD_GAP + RD_W) > (ML + PW - 4);
+  const rx = showLeft ? cx - RD_GAP - RD_W : cx + RD_GAP;
+  const ry = MT + PH / 2 - RD_H / 2;
+  rdGrp.setAttribute('transform', `translate(${rx.toFixed(1)},${ry.toFixed(1)})`);
+  rdGrp.setAttribute('opacity', 1);
+
+  const vals = interp(f);
+  rdGrp.querySelector('#ro-freq').textContent = f.toFixed(3) + ' GHz';
+  rdGrp.querySelector('#ro-s21').textContent  = vals.s21.toFixed(2) + ' dB';
+  rdGrp.querySelector('#ro-s31').textContent  = vals.s31.toFixed(2) + ' dB';
+  rdGrp.querySelector('#ro-s11').textContent  = vals.s11.toFixed(2) + ' dB';
+}
+
+svg.addEventListener('mouseenter', () => { isDragging = true; });
+svg.addEventListener('mouseleave', () => {
+  isDragging = false;
+  if (cursorLine) cursorLine.setAttribute('opacity', 0);
+  if (rdGrp) rdGrp.setAttribute('opacity', 0);
+});
+svg.addEventListener('mousemove', e => updateCursor(e.clientX));
+svg.addEventListener('touchmove', e => {
+  e.preventDefault();
+  updateCursor(e.touches[0].clientX);
+}, { passive: false });
+
+// Build on load and on resize
+window.addEventListener('resize', () => build());
+window.addEventListener('load',   () => build());
+</script>
+</body>
+</html>
