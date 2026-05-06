@@ -1,0 +1,182 @@
+"""Run refine20 — Phase A: suppress S31 stopband bump. Parallel execution."""
+import json
+import math
+import subprocess
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
+
+ROOT     = Path(r"D:\Desktop\HFSS_real")
+OUT_ROOT = ROOT / "12GHzdiplexer2" / "derived" / "refine20"
+RUNNER   = ROOT / "12GHzdiplexer" / "scripts" / "run_hfss_case.py"
+PLOT     = ROOT / "tools" / "plot_s3p.py"
+IPY      = r"E:\HFFS\HFSS_2021\Program Files\AnsysEM\AnsysEM21.2\Win64\common\IronPython\ipy64.exe"
+
+MAX_WORKERS = 4
+print_lock  = threading.Lock()
+
+BASELINE = {
+    "crossing": 17.875, "s31_3db": 17.68, "worst_il": -4.1,
+    "s31_bump": -8.1,   "bump_freq": 19.2,
+}
+
+
+def parse_s3p(path):
+    recs, fmt, buf = [], "MA", []
+    for line in Path(path).read_text(errors="ignore").splitlines():
+        s = line.strip()
+        if not s or s.startswith("!"): continue
+        if s.startswith("#"):
+            fmt = "DB" if "DB" in s.upper() else ("RI" if "RI" in s.upper() else "MA")
+            continue
+        if line[0] in (" ", "\t"): buf.extend(float(x) for x in s.split())
+        else:
+            if buf: recs.append(buf)
+            buf = [float(x) for x in s.split()]
+    if buf: recs.append(buf)
+    fr, s11, s21, s31 = [], [], [], []
+    for r in recs:
+        if len(r) < 19: continue
+        f = r[0] / 1e9 if r[0] > 1e7 else r[0]
+        fr.append(f)
+        db = lambda v: 20 * math.log10(v) if v > 0 else -100
+        if fmt == "DB":
+            s11.append(r[1]); s21.append(r[7]); s31.append(r[13])
+        elif fmt == "MA":
+            s11.append(db(r[1])); s21.append(db(r[7])); s31.append(db(r[13]))
+        else:
+            s11.append(db(math.hypot(r[1], r[2])))
+            s21.append(db(math.hypot(r[7], r[8])))
+            s31.append(db(math.hypot(r[13], r[14])))
+    return fr, s11, s21, s31
+
+
+def at(fr, vals, f):
+    return vals[min(range(len(fr)), key=lambda i: abs(fr[i] - f))]
+
+
+def crossing_freq(fr, s21, s31):
+    for i in range(len(fr) - 1):
+        d0, d1 = s21[i] - s31[i], s21[i+1] - s31[i+1]
+        if d0 * d1 <= 0:
+            t = d0 / (d0 - d1) if abs(d0 - d1) > 1e-9 else 0.5
+            return fr[i] + t * (fr[i+1] - fr[i])
+    return None
+
+
+def bump_peak(fr, s31):
+    """Find max S31 in the 18.3-21 GHz stopband region (the bump)."""
+    region = [(f, v) for f, v in zip(fr, s31) if 18.0 <= f <= 21.0]
+    if not region: return None, None
+    f_pk, v_pk = max(region, key=lambda x: x[1])
+    return f_pk, v_pk
+
+
+def metrics(fr, s11, s21, s31):
+    fc   = crossing_freq(fr, s21, s31)
+    pts  = [f for f, v in zip(fr, s31) if v >= -3]
+    lpf  = max(pts) if pts else None
+    chk  = [20, 21, 22, 23, 25, 28, 30, 36]
+    vals = [at(fr, s21, f) for f in chk]
+    hil  = min(vals)
+    rip  = max(vals) - hil
+    f_bk, v_bk = bump_peak(fr, s31)
+    return fc, lpf, hil, rip, f_bk, v_bk
+
+
+def run_one(item):
+    name = Path(item["project_path"]).stem
+    s3p  = Path(item["output_dir"]) / f"{name}.s3p"
+    if s3p.exists():
+        with print_lock: print(f"  [cached] {item['case']}")
+        return item, True
+    with print_lock: print(f"  [start ] {item['case']}")
+    ret = subprocess.run(
+        [IPY, str(RUNNER), item["project_path"], item["output_dir"]],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+    ok = ret.returncode == 0 and s3p.exists()
+    with print_lock: print(f"  [{'done ' if ok else 'FAIL '}] {item['case']}")
+    if ok:
+        subprocess.run(
+            ["python", str(PLOT), str(s3p), "--open"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+    return item, ok
+
+
+def main():
+    manifest = json.loads((OUT_ROOT / "manifest.json").read_text(encoding="utf-8"))
+
+    todo   = [it for it in manifest
+              if not (Path(it["output_dir"]) /
+                      f"{Path(it['project_path']).stem}.s3p").exists()]
+    cached = [it for it in manifest if it not in todo]
+    print(f"\n{len(cached)} cached, {len(todo)} to simulate "
+          f"({MAX_WORKERS} parallel workers)\n")
+
+    results = {}
+    for it in cached:
+        name = Path(it["project_path"]).stem
+        s3p  = Path(it["output_dir"]) / f"{name}.s3p"
+        results[it["case"]] = parse_s3p(s3p)
+
+    if todo:
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
+            futs = {ex.submit(run_one, it): it for it in todo}
+            for fut in as_completed(futs):
+                item, ok = fut.result()
+                if ok:
+                    name = Path(item["project_path"]).stem
+                    s3p  = Path(item["output_dir"]) / f"{name}.s3p"
+                    results[item["case"]] = parse_s3p(s3p)
+
+    # ── Full results table ────────────────────────────────────────────────────
+    print("\n" + "=" * 80)
+    print("PHASE A RESULTS  (baseline: r19_best)")
+    print(f"  {'Case':<30} {'Cross':>8} {'S31-3dB':>8} {'BumpPk':>8} {'@f':>6} "
+          f"{'wrstIL':>8} {'rip':>6}")
+    print("-" * 75)
+
+    # print baseline first
+    print(f"  {'[baseline r19_best]':<30} "
+          f"{BASELINE['crossing']:>8.3f} "
+          f"{BASELINE['s31_3db']:>8.2f} "
+          f"{BASELINE['s31_bump']:>8.1f} "
+          f"{BASELINE['bump_freq']:>6.1f} "
+          f"{BASELINE['worst_il']:>8.1f}   --")
+
+    rows = []
+    for it in manifest:
+        case = it["case"]
+        if case not in results: continue
+        fr, s11, s21, s31 = results[case]
+        fc, lpf, hil, rip, f_bk, v_bk = metrics(fr, s11, s21, s31)
+        rows.append((case, fc, lpf, hil, rip, f_bk, v_bk, fr, s11, s21, s31, it))
+
+    for case, fc, lpf, hil, rip, f_bk, v_bk, *_ in rows:
+        ok_c  = "✓" if fc  and fc  >= 18.5 else " "
+        ok_b  = "✓" if v_bk and v_bk <= -10.0 else " "
+        fc_s  = f"{fc:.3f}"  if fc  else " none"
+        lpf_s = f"{lpf:.2f}" if lpf else " FAIL"
+        bk_s  = f"{v_bk:.1f}" if v_bk else " ---"
+        fbk_s = f"{f_bk:.1f}" if f_bk else " ---"
+        print(f"  {case:<30} {fc_s:>8}{ok_c} {lpf_s:>8} "
+              f"{bk_s:>8}{ok_b} {fbk_s:>6} {hil:>8.1f} {rip:>6.1f}")
+
+    # ── Detailed S31 stopband for top candidates ──────────────────────────────
+    best_bump = sorted([r for r in rows if r[6] is not None], key=lambda x: x[6])
+    print("\n\nDETAIL — S31 in 17-21 GHz  (best bump suppression cases):")
+    for case, fc, lpf, hil, rip, f_bk, v_bk, fr, s11, s21, s31, it in best_bump[:4]:
+        print(f"\n  {case}  (bump={v_bk:.1f} dB @ {f_bk:.1f} GHz)")
+        for fq in [17.0, 17.5, 17.7, 18.0, 18.3, 18.6, 19.0, 19.3, 19.6, 20.0, 20.5, 21.0]:
+            sv = at(fr, s31, fq)
+            ok = "✓" if sv <= -10 else " "
+            print(f"    {fq:.1f} GHz  S31={sv:+5.1f} dB {ok}  "
+                  f"S21={at(fr,s21,fq):+5.1f} dB  S11={at(fr,s11,fq):+5.1f} dB")
+
+    print("\nAll done.")
+
+
+if __name__ == "__main__":
+    main()

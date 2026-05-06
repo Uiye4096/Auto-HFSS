@@ -1,0 +1,326 @@
+[
+  {
+    "file": "12GHzdiplexer.aedt",
+    "variables": [
+      {
+        "name": "l_sub12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "2.576mm",
+        "line": 283
+      },
+      {
+        "name": "w_line12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.37mm",
+        "line": 284
+      },
+      {
+        "name": "delta_x_HP12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.05mm",
+        "line": 285
+      },
+      {
+        "name": "l_sub_LPF12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "4.34mm",
+        "line": 286
+      },
+      {
+        "name": "l_line112g",
+        "kind": "UD",
+        "flags": "",
+        "value": "2mm",
+        "line": 287
+      },
+      {
+        "name": "h_sub12G",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.254mm",
+        "line": 288
+      },
+      {
+        "name": "w_sub12G",
+        "kind": "UD",
+        "flags": "",
+        "value": "1.5mm",
+        "line": 289
+      },
+      {
+        "name": "copper",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.035mm",
+        "line": 290
+      },
+      {
+        "name": "gap_down_box12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.2mm",
+        "line": 291
+      },
+      {
+        "name": "h_down_box12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.25mm",
+        "line": 292
+      },
+      {
+        "name": "h_up_box12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.25mm",
+        "line": 293
+      },
+      {
+        "name": "gap_up_box12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0mm",
+        "line": 294
+      },
+      {
+        "name": "l_line312g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.04mm",
+        "line": 295
+      },
+      {
+        "name": "delta_cover_HPF12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.05mm",
+        "line": 296
+      },
+      {
+        "name": "l_line212g",
+        "kind": "UD",
+        "flags": "",
+        "value": "1mm",
+        "line": 297
+      },
+      {
+        "name": "w_L212g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.032mm",
+        "line": 298
+      },
+      {
+        "name": "L2_g212g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.05mm",
+        "line": 299
+      },
+      {
+        "name": "d_L212g",
+        "kind": "UD",
+        "flags": "",
+        "value": "1.41mm",
+        "line": 300
+      },
+      {
+        "name": "cover_HPF_out12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.1mm",
+        "line": 301
+      },
+      {
+        "name": "w_L412g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.056mm",
+        "line": 302
+      },
+      {
+        "name": "d_L412g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.6mm",
+        "line": 303
+      },
+      {
+        "name": "L4_g112g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.07mm",
+        "line": 304
+      },
+      {
+        "name": "L4_g212g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.06mm",
+        "line": 305
+      },
+      {
+        "name": "L4_g412g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.3mm",
+        "line": 306
+      },
+      {
+        "name": "L4_g312g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.4mm",
+        "line": 307
+      },
+      {
+        "name": "L2_g312g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.4mm",
+        "line": 308
+      },
+      {
+        "name": "L2_g112g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.04mm",
+        "line": 309
+      },
+      {
+        "name": "L2_g412g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.3mm",
+        "line": 310
+      },
+      {
+        "name": "l_L512g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.77mm",
+        "line": 311
+      },
+      {
+        "name": "w_L512g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.08mm",
+        "line": 312
+      },
+      {
+        "name": "w_C412g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.33mm",
+        "line": 313
+      },
+      {
+        "name": "l_C412g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.616mm",
+        "line": 314
+      },
+      {
+        "name": "l_L312g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.792mm",
+        "line": 315
+      },
+      {
+        "name": "w_L312g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.04mm",
+        "line": 316
+      },
+      {
+        "name": "l_C212g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.506mm",
+        "line": 317
+      },
+      {
+        "name": "w_C212g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.33mm",
+        "line": 318
+      },
+      {
+        "name": "l_L112g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.616mm",
+        "line": 319
+      },
+      {
+        "name": "w_L112g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.09mm",
+        "line": 320
+      },
+      {
+        "name": "l_line412g",
+        "kind": "UD",
+        "flags": "",
+        "value": "1mm",
+        "line": 321
+      }
+    ],
+    "variable_order": {
+      "line": 323,
+      "names": [
+        "l_sub12g",
+        "w_line12g",
+        "delta_x_HP12g",
+        "l_sub_LPF12g",
+        "l_line112g",
+        "h_sub12G",
+        "w_sub12G",
+        "copper",
+        "gap_down_box12g",
+        "h_down_box12g",
+        "h_up_box12g",
+        "gap_up_box12g",
+        "l_line312g",
+        "delta_cover_HPF12g",
+        "l_line212g",
+        "w_L212g",
+        "L2_g212g",
+        "d_L212g",
+        "cover_HPF_out12g",
+        "w_L412g",
+        "d_L412g",
+        "L4_g112g",
+        "L4_g212g",
+        "L4_g412g",
+        "L4_g312g",
+        "L2_g312g",
+        "L2_g112g",
+        "L2_g412g",
+        "l_L512g",
+        "w_L512g",
+        "w_C412g",
+        "l_C412g",
+        "l_L312g",
+        "w_L312g",
+        "l_C212g",
+        "w_C212g",
+        "l_L112g",
+        "w_L112g",
+        "l_line412g"
+      ]
+    },
+    "analysis_setups": [],
+    "optimetrics_setups": []
+  }
+]

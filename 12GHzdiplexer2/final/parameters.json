@@ -1,0 +1,50 @@
+{
+  "design": "Diplexer HPF — Final Accepted Configuration",
+  "source_case": "r27_c1y022",
+  "date": "2026-04-28",
+
+  "fixed_parameters": {
+    "w_sub12G":    "1.700 mm",
+    "w_line12g":   "0.395 mm",
+    "h_sub12G":    "0.254 mm"
+  },
+
+  "optimized_parameters": {
+    "LPF_scaling_k":     0.90,
+    "l_L512g":           "0.693000 mm",
+    "l_C412g":           "0.554400 mm",
+    "l_L312g":           "0.820800 mm",
+    "l_C212g":           "0.455400 mm",
+    "l_L112g":           "0.464400 mm",
+    "l_sub_LPF12g":      "4.008000 mm",
+    "w_C412g":           "1.450000 mm",
+    "w_C212g":           "1.450000 mm",
+    "L4_g312g":          "0.850000 mm",
+    "L2_g312g":          "0.750000 mm",
+    "index1":            "0.600000",
+    "w_C1_y":            "0.220000 mm"
+  },
+
+  "performance": {
+    "crossing_frequency_GHz": 18.552,
+    "S31_at_19GHz_dB":       -10.8,
+    "S31_at_20GHz_dB":       -15.8,
+    "S31_at_22GHz_dB":       -17.1,
+    "passband_ripple_20_25GHz_dB": 0.6,
+    "passband_ripple_20_28GHz_dB": 1.1,
+    "min_IL_above_20GHz_dB": -3.1
+  },
+
+  "targets_met": {
+    "crossing_ge_18p5GHz":    true,
+    "S31_at_19GHz_le_neg10dB": true,
+    "S31_at_20GHz_le_neg10dB": true,
+    "ripple_20_25GHz_le_1dB":  true
+  },
+
+  "files": {
+    "hfss_project":  "diplexer_HPF_final.aedt",
+    "s3p_result":    "diplexer_HPF_final.s3p",
+    "svg_plot":      "diplexer_HPF_final.svg"
+  }
+}
