@@ -1,21 +1,21 @@
-{
-  "uid": "034",
-  "source_run": "034_wC2_108",
-  "parameters": {
-    "k": 0.96,
-    "w_C4185g": "1.15mm",
-    "w_C2185g": "1.08mm",
-    "L4_g3185g": "0.85mm",
-    "L2_g3185g": "0.78mm",
-    "L7_g3185g": "0.9mm"
-  },
-  "metrics": {
-    "crossing_GHz": 18.5399,
-    "S31_at_19GHz_dB": -10.21,
-    "S31_at_20GHz_dB": -12.27,
-    "ripple_20_25GHz_dB": 0.58,
-    "min_IL_20plus_dB": -1.23,
-    "S11_worst_19_25GHz_dB": -7.43
-  },
-  "status": "all_targets_met"
+﻿{
+    "status":  "all_targets_met",
+    "metrics":  {
+                    "ripple_20_25GHz_dB":  0.54,
+                    "crossing_GHz":  18.546,
+                    "S31_at_20GHz_dB":  -12.3,
+                    "S11_worst_19_25GHz_dB":  -7.4,
+                    "S31_at_19GHz_dB":  -10.9,
+                    "min_IL_20plus_dB":  -1.4
+                },
+    "parameters":  {
+                       "L7_g3185g":  "0.75mm",
+                       "w_C2185g":  "1.08mm",
+                       "k":  0.96,
+                       "L4_g3185g":  "0.85mm",
+                       "w_C4185g":  "1.15mm",
+                       "L2_g3185g":  "0.78mm"
+                   },
+    "uid":  "037",
+    "source_run":  "037_L7g3_075"
 }
