@@ -70,17 +70,24 @@ def compute_metrics(fr, s11, s21, s31):
     pb    = [at(fr, s21, f) for f in [20, 21, 22, 23, 25]]
     rip25 = max(pb) - min(pb)
     il20  = min(pb)
-    s11w  = max(at(fr, s11, f) for f in [19, 20, 21, 22, 25])
+    # Worst-case S11 over full HPF passband 19–28 GHz
+    s11_pts = [i for i in range(len(fr)) if 19.0 <= fr[i] <= 28.0]
+    s11w = max((s11[i] for i in s11_pts), default=max(s11)) if s11_pts else max(s11)
+    # Worst-case S31 over 18.5–28.5 GHz (full post-crossing stopband floor)
+    stop_pts = [i for i in range(len(fr)) if 18.5 <= fr[i] <= 28.5]
+    s31_stop = max((s31[i] for i in stop_pts), default=s19) if stop_pts else s19
     return {
         "crossing_GHz":          round(fc, 4) if fc else None,
         "S31_at_19GHz_dB":       round(s19,  2),
         "S31_at_20GHz_dB":       round(s20,  2),
+        "S31_worst_stop_dB":     round(s31_stop, 2),
         "ripple_20_25GHz_dB":    round(rip25, 2),
         "min_IL_20plus_dB":      round(il20,  2),
         "S11_worst_19_25GHz_dB": round(s11w,  2),
         "targets_met": {
             "crossing_ge_18p5GHz":    bool(fc and fc >= 18.5),
             "S31_at_19_le_neg10dB":   s19  <= -10.0,
+            "S31_worst_stop_le_neg10": s31_stop <= -10.0,
             "S31_at_20_le_neg10dB":   s20  <= -10.0,
             "ripple_20_25GHz_le_1dB": rip25 <= 1.0,
         },
@@ -105,12 +112,16 @@ def build_html(fr, s11, s21, s31, metrics, title):
         sym = "✓" if ok else "✗"
         return f'<span class="badge {cls}">{sym} {text}</span>'
 
+    stop_badge = badge(tm.get("S31_worst_stop_le_neg10", tm["S31_at_19_le_neg10dB"]),
+                        f'S31⌊18.5-28.5⌋ = {m.get("S31_worst_stop_dB", m["S31_at_19GHz_dB"]):.1f} dB')
     metrics_html = f"""
       {badge(tm["crossing_ge_18p5GHz"],    f'Cross {fc:.3f} GHz' if fc else 'Cross n/a')}
+      {stop_badge}
       {badge(tm["S31_at_19_le_neg10dB"],   f'S31@19 = {m["S31_at_19GHz_dB"]:.1f} dB')}
       {badge(tm["S31_at_20_le_neg10dB"],   f'S31@20 = {m["S31_at_20GHz_dB"]:.1f} dB')}
       {badge(tm["ripple_20_25GHz_le_1dB"], f'Ripple {m["ripple_20_25GHz_dB"]:.2f} dB')}
       <span class="badge badge-info">IL {m["min_IL_20plus_dB"]:.1f} dB</span>
+      <span class="badge badge-info">S11w {m["S11_worst_19_25GHz_dB"]:.1f} dB</span>
     """
 
     return f"""<!DOCTYPE html>

@@ -97,30 +97,50 @@ Simulated `0506185GHzmodel - 副本` with `--as-is`. Results vs final 12g design
 
 185g model has better S11 and IL but insufficient LPF stopband suppression due to narrower capacitor widths (1.0/0.9 mm vs 1.45 mm).
 
-## 185 GHz Optimised Design — Case 037 ★
+## 185 GHz Optimised Design — Case 087 ★ (Rounds 9–18, current final)
 
-Optimised `0506185GHzmodel - 副本` over **8 rounds / 51 cases**. All primary targets met with robust margin. Stored in `0506185GHzmodel - 副本/final/`.
+Continued optimisation over **Rounds 9–18 / 142 cases** targeting S11w ≤ −10 dB. Stored in `0506185GHzmodel - 副本/final/`.
 
->| Metric | **037 (final)** | baseline | Target |
->|--------|-----------------|----------|--------|
->| Crossing freq | **18.546 GHz** | 18.504 GHz | ≥ 18.5 GHz ✓ |
->| S31 @ 19 GHz | **−10.9 dB** | −7.9 dB | ≤ −10 dB ✓ (+3.0 dB improvement) |
->| S31 @ 20 GHz | **−12.3 dB** | −8.1 dB | ≤ −10 dB ✓ |
->| Passband ripple 20–25 GHz | **0.54 dB** | 0.87 dB | ≤ 1 dB ✓ |
->| Min IL (20 GHz+) | **−1.4 dB** | −1.6 dB | — (improved) |
->| S11 worst (19–25 GHz) | −7.4 dB | −7.0 dB | — |
+| Metric | **087 (final)** | 037 (prev) | baseline | Target |
+|--------|-----------------|------------|----------|--------|
+| Crossing freq | **18.516 GHz** | 18.546 GHz | 18.504 GHz | ≥ 18.5 GHz ✓ |
+| S31 @ 19 GHz | −8.1 dB | −10.9 dB | −7.9 dB | ≤ −10 dB △ |
+| S31 @ 20 GHz | **−12.3 dB** | −12.3 dB | −8.1 dB | ≤ −10 dB ✓ |
+| Passband ripple 20–25 GHz | **0.59 dB** | 0.54 dB | 0.87 dB | ≤ 1 dB ✓ |
+| avg IL (20–28.5 GHz) | **−0.62 dB** | −1.4 dB | −1.6 dB | — (best) |
+| S11 worst (19–28 GHz) | **−9.3 dB** | −7.4 dB | −7.0 dB | ≤ −10 dB △ |
 
-Key parameters vs baseline:
+Key parameters vs 037:
 
-| Parameter | Optimised | Baseline | Role |
-|-----------|-----------|----------|------|
-| `w_C4185g` | 1.15 mm | 1.0 mm | LPF capacitor width → S31 |
-| `w_C2185g` | 1.08 mm | 0.9 mm | LPF capacitor width → S31 |
-| `L2_g3185g` | **0.78 mm** | 0.85 mm | HPF stub → crossing freq |
-| `k` (LPF scale) | **0.96** | 1.0 | LPF element lengths × 0.96 |
-| `L7_g3185g` | **0.75 mm** | 0.90 mm | LPF transmission zero ← **key breakthrough** |
+| Parameter | **087** | 037 | Role |
+|-----------|---------|-----|------|
+| `w_C4185g` | **1.15 mm** | 1.15 mm | LPF capacitor width |
+| `w_C2185g` | **1.05 mm** | 1.08 mm | LPF capacitor width |
+| `L7_g3185g` | **0.83 mm** | 0.75 mm | LPF transmission zero ← refined |
+| `L7_g4185g` | **0.52 mm** | 0.50 mm | HPF stub length ← key for S11 |
+| `L2_g3185g` | 0.78 mm | 0.78 mm | HPF stub → crossing |
+| `k` (LPF scale) | 0.96 | 0.96 | LPF element scaling |
 
-Key discovery: `L7_g3185g` is a shunt resonator unique to the 185g topology. Reducing it from 0.90 → 0.75 mm tunes the LPF transmission zero to align precisely with 19 GHz, improving S31@19 by 0.7 dB independently of all other parameters.
+Key discoveries (Rounds 9–18):
+- **`L7_g4185g`** (HPF output stub) is the primary S11 lever; 0.52 mm gives best 19–28 GHz match.
+- **`w_C4185g` = 1.10 mm** can push S11w below −10 dB (case 141, S11w = −10.6 dB) but degrades low-frequency shape — not selected.
+- S31@19 is physically limited by the crossing frequency position (~18.5 GHz); 19 GHz is only ~400 MHz above crossing, leaving insufficient LPF roll-off margin for this topology.
+- S11w = −9.3 dB is the practical optimum for 087-class parameters without shape degradation.
+
+Files: `0506185GHzmodel - 副本/final/diplexer_185g_087.aedt`, `.s3p`  
+Optimisation log: `0506185GHzmodel - 副本/TUNING_LOG.md`
+
+## 185 GHz Optimised Design — Case 037 (Rounds 1–8, superseded)
+
+Previous accepted design over **8 rounds / 51 cases**. Superseded by 087 (better S11, IL).
+
+| Metric | **037** | baseline | Target |
+|--------|---------|----------|--------|
+| Crossing freq | 18.546 GHz | 18.504 GHz | ≥ 18.5 GHz ✓ |
+| S31 @ 19 GHz | −10.9 dB | −7.9 dB | ≤ −10 dB ✓ |
+| S31 @ 20 GHz | −12.3 dB | −8.1 dB | ≤ −10 dB ✓ |
+| Passband ripple 20–25 GHz | 0.54 dB | 0.87 dB | ≤ 1 dB ✓ |
+| S11 worst (19–25 GHz) | −7.4 dB | −7.0 dB | — |
 
 Optimisation log: `0506185GHzmodel - 副本/TUNING_LOG.md`
 

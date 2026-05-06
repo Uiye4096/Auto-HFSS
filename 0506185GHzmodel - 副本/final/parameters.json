@@ -1,23 +1,29 @@
-﻿{
-    "label":  "CURRENT BEST — pending S11 improvement",
-    "uid":  "024",
-    "note":  "Best 20-28GHz ripple (0.80dB). Chosen as stable base for upcoming S11 matching sweep.",
-    "metrics":  {
-                    "ripple_20_25GHz_dB":  0.56,
-                    "crossing_GHz":  18.535,
-                    "S31_at_20GHz_dB":  -11.9,
-                    "S11_worst_19_25GHz_dB":  -7.2,
-                    "ripple_20_28GHz_dB":  0.8,
-                    "S31_at_19GHz_dB":  -10.1,
-                    "min_IL_20plus_dB":  -1.3
-                },
-    "parameters":  {
-                       "L7_g3185g":  "0.90mm",
-                       "w_C2185g":  "1.05mm",
-                       "k":  0.96,
-                       "L4_g3185g":  "0.85mm",
-                       "w_C4185g":  "1.15mm",
-                       "L2_g3185g":  "0.78mm"
-                   },
-    "status":  "targets_met_S11_to_improve"
+{
+  "uid": "087",
+  "round": 12,
+  "status": "FINAL_BEST_OVERALL",
+  "note": "Best shape: S11 natural, no high-freq peaks, best S31 suppression. S11w=-9.3 is 0.7dB from -10 target but shape preferred over 141.",
+  "parameters": {
+    "w_C4185g": 1.15,
+    "w_C2185g": 1.05,
+    "l_line2185g": 0.6,
+    "L4_g3185g": 0.85,
+    "L2_g3185g": 0.78,
+    "L7_g3185g": 0.83,
+    "L7_g4185g": 0.52,
+    "k_LPF": 0.96,
+    "l_L5185g": 0.695808,
+    "l_C4185g": 0.446477,
+    "l_L3185g": 0.898752,
+    "l_C2185g": 0.504461,
+    "l_L1185g": 0.666816
+  },
+  "metrics": {
+    "crossing_GHz": 18.516,
+    "S31_at_19GHz_dB": -8.1,
+    "S31_at_20GHz_dB": -12.3,
+    "ripple_20_25GHz_dB": 0.59,
+    "S11_worst_19_28GHz_dB": -9.3,
+    "avg_S21_20_285_dB": -0.62
+  }
 }
