@@ -13,7 +13,8 @@ Each run creates:
   <project>/runs/run_wC145_L485_L275_k090_<timestamp>/
       project.aedt   — parameterised HFSS project
       result.s3p     — exported S-parameters
-      plot.svg       — S-parameter chart
+      plot.svg       — S-parameter chart (static)
+      plot.html      — interactive S-parameter viewer
       params.json    — parameters + metrics
       run.log        — HFSS log
 """
@@ -25,6 +26,9 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from plot_interactive import build_html
 
 # ── Paths (adjust if your install differs) ────────────────────────────────────
 HFSS_ROOT  = Path(r"D:\Desktop\HFSS_real")
@@ -417,8 +421,12 @@ def main():
         svg_path.write_text(make_svg(fr, s11, s21, s31, metrics, title), encoding="utf-8")
         log.info(f"Saved: {svg_path.name}")
 
+        html_path = run_dir / "plot.html"
+        html_path.write_text(build_html(fr, s11, s21, s31, metrics, title), encoding="utf-8")
+        log.info(f"Saved: {html_path.name}")
+
         if args.open_svg:
-            subprocess.Popen(["explorer", str(svg_path)])
+            subprocess.Popen(["explorer", str(html_path)])
 
     log.info(f"Done. Results in: {run_dir}")
 
