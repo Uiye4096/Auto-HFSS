@@ -1,26 +1,21 @@
-﻿{
-    "status":  "all_targets_met",
-    "metrics":  {
-                    "ripple_20_25GHz_dB":  0.56,
-                    "crossing_GHz":  18.535,
-                    "S31_at_20GHz_dB":  -11.9,
-                    "S11_worst_19_25GHz_dB":  -7.2,
-                    "S31_at_19GHz_dB":  -10.3,
-                    "min_IL_20plus_dB":  -1.3
-                },
-    "parameters":  {
-                       "l_C4185g":  "0.446477mm",
-                       "l_L3185g":  "0.898752mm",
-                       "L2_g3185g":  "0.78mm",
-                       "l_L5185g":  "0.695808mm",
-                       "l_L1185g":  "0.666816mm",
-                       "L4_g3185g":  "0.85mm",
-                       "k":  0.96,
-                       "w_C4185g":  "1.15mm",
-                       "L7_g3185g":  "0.90mm",
-                       "l_C2185g":  "0.504461mm",
-                       "w_C2185g":  "1.05mm"
-                   },
-    "uid":  "024",
-    "source_run":  "024_L2g3_078"
+{
+  "uid": "034",
+  "source_run": "034_wC2_108",
+  "parameters": {
+    "k": 0.96,
+    "w_C4185g": "1.15mm",
+    "w_C2185g": "1.08mm",
+    "L4_g3185g": "0.85mm",
+    "L2_g3185g": "0.78mm",
+    "L7_g3185g": "0.9mm"
+  },
+  "metrics": {
+    "crossing_GHz": 18.5399,
+    "S31_at_19GHz_dB": -10.21,
+    "S31_at_20GHz_dB": -12.27,
+    "ripple_20_25GHz_dB": 0.58,
+    "min_IL_20plus_dB": -1.23,
+    "S11_worst_19_25GHz_dB": -7.43
+  },
+  "status": "all_targets_met"
 }
