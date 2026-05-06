@@ -5839,8 +5839,8 @@ $begin 'AnsoftProject'
 							IsEnabled=true
 							RangeType='LinearCount'
 							RangeStart='5GHz'
-							RangeEnd='35GHz'
-							RangeCount=401
+							RangeEnd='30GHz'
+							RangeCount=301
 							Type='Interpolating'
 							SaveFields=false
 							SaveRadFields=false

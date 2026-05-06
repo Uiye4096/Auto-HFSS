@@ -239,7 +239,7 @@ def build_html(fr, s11, s21, s31, metrics, title):
 
 <header>
   <h1>{title}</h1>
-  <span class="sub">Drag to inspect · S-Parameters 0–40 GHz</span>
+  <span class="sub">Drag to inspect · S-Parameters 5–30 GHz</span>
 </header>
 
 <div class="metrics-bar">
@@ -266,7 +266,7 @@ def build_html(fr, s11, s21, s31, metrics, title):
 const DATA = {data_json};
 const METRICS = {json.dumps(metrics)};
 
-const FMIN = 0, FMAX = 40, YMIN = -40, YMAX = 5;
+const FMIN = 5, FMAX = 30, YMIN = -40, YMAX = 5;
 
 const svg    = document.getElementById('chart');
 const wrap   = document.getElementById('chartWrap');
@@ -327,9 +327,9 @@ function build() {{
   svg.appendChild(mkEl('rect', {{x:ML, y:MT, width:PW, height:PH, fill:'#FFFFFF',
     rx:2, stroke:'#E8E5DF', 'stroke-width':1}}));
 
-  // Passband shading 18.5–40 GHz
+  // Passband shading 18.5–30 GHz
   svg.appendChild(mkEl('rect', {{
-    x: px(18.5).toFixed(1), y: MT, width: (px(40)-px(18.5)).toFixed(1), height: PH,
+    x: px(18.5).toFixed(1), y: MT, width: (px(30)-px(18.5)).toFixed(1), height: PH,
     fill: '#FDF0E6', opacity: 0.5
   }}));
 
@@ -352,7 +352,7 @@ function build() {{
   }}
 
   // Grid & X axis
-  for (let f = 0; f <= 40; f += 5) {{
+  for (let f = 5; f <= 30; f += 5) {{
     const xp = px(f).toFixed(1);
     svg.appendChild(mkEl('line', {{
       x1:xp, y1:MT, x2:xp, y2:MT+PH,
