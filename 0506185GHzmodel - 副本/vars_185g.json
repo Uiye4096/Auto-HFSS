@@ -1,0 +1,600 @@
+[
+  {
+    "file": "0506185GHzmodel - 副本\\diplexer185GHzmodel.aedt",
+    "variables": [
+      {
+        "name": "l_line3185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.604mm",
+        "line": 283
+      },
+      {
+        "name": "l_C4185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.46508mm",
+        "line": 284
+      },
+      {
+        "name": "l_L3185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.9362mm",
+        "line": 285
+      },
+      {
+        "name": "w_line185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.395mm",
+        "line": 286
+      },
+      {
+        "name": "l_C2185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.52548mm",
+        "line": 287
+      },
+      {
+        "name": "l_L1185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.6946mm",
+        "line": 288
+      },
+      {
+        "name": "l_line4185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "1mm",
+        "line": 289
+      },
+      {
+        "name": "l_L5185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.7248mm",
+        "line": 290
+      },
+      {
+        "name": "l_sub185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "L2_g2185g+L2_g2185g+L4_g4185g+L4_g2185g+w_L4185g/2+L4_g2185g+L4_g4185g+w_L4185g/2+kong185G+L2_g4185g+w_L2185g*2+L2_g4185g-kong2185g+kong0185g+l_line2185g",
+        "line": 291
+      },
+      {
+        "name": "l_sub_LPF185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "l_line3185g+l_L5185g+l_C4185g+l_L3185g+l_C2185g+l_L1185g+l_line4185g",
+        "line": 292
+      },
+      {
+        "name": "l_line185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "2mm",
+        "line": 293
+      },
+      {
+        "name": "L4_g4185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.501mm",
+        "line": 294
+      },
+      {
+        "name": "h_sub185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.254mm",
+        "line": 295
+      },
+      {
+        "name": "w_L4185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.04mm",
+        "line": 296
+      },
+      {
+        "name": "kong0185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0",
+        "line": 297
+      },
+      {
+        "name": "L4_g2185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.05mm",
+        "line": 298
+      },
+      {
+        "name": "w_sub185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "1.7mm",
+        "line": 299
+      },
+      {
+        "name": "L2_g4185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.501mm",
+        "line": 300
+      },
+      {
+        "name": "L2_g2185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.05mm",
+        "line": 301
+      },
+      {
+        "name": "w_L2185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.01mm",
+        "line": 302
+      },
+      {
+        "name": "kong185G",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.06mm",
+        "line": 303
+      },
+      {
+        "name": "kong2185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.42mm",
+        "line": 304
+      },
+      {
+        "name": "l_line2185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.6mm",
+        "line": 305
+      },
+      {
+        "name": "copper",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.035mm",
+        "line": 306
+      },
+      {
+        "name": "h_down_box185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.25mm",
+        "line": 307
+      },
+      {
+        "name": "h_up_box185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.25mm",
+        "line": 308
+      },
+      {
+        "name": "gap_up_box185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0mm",
+        "line": 309
+      },
+      {
+        "name": "gap_down_box185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.2mm",
+        "line": 310
+      },
+      {
+        "name": "l_line112g",
+        "kind": "UD",
+        "flags": "",
+        "value": "2mm",
+        "line": 311
+      },
+      {
+        "name": "w_line12g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.395mm",
+        "line": 312
+      },
+      {
+        "name": "w_line702g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.395mm",
+        "line": 313
+      },
+      {
+        "name": "delta_cover_HPF185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.15mm",
+        "line": 314
+      },
+      {
+        "name": "w_lineout185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.395mm",
+        "line": 315
+      },
+      {
+        "name": "w_L5185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.04mm",
+        "line": 316
+      },
+      {
+        "name": "w_C4185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "1mm",
+        "line": 317
+      },
+      {
+        "name": "w_L3185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.04mm",
+        "line": 318
+      },
+      {
+        "name": "w_C2185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.9mm",
+        "line": 319
+      },
+      {
+        "name": "w_L1185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.06mm",
+        "line": 320
+      },
+      {
+        "name": "L2_g1185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.04mm",
+        "line": 321
+      },
+      {
+        "name": "L7_g3185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.9mm",
+        "line": 322
+      },
+      {
+        "name": "L7_g4185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.396mm",
+        "line": 323
+      },
+      {
+        "name": "L4_g1185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.07mm",
+        "line": 324
+      },
+      {
+        "name": "L2_g3185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.85mm",
+        "line": 325
+      },
+      {
+        "name": "L4_g3185g",
+        "kind": "UD",
+        "flags": "",
+        "value": "0.85mm",
+        "line": 326
+      }
+    ],
+    "variable_order": {
+      "line": 328,
+      "names": [
+        "l_line3185g",
+        "l_C4185g",
+        "l_L3185g",
+        "w_line185g",
+        "l_C2185g",
+        "l_L1185g",
+        "l_line4185g",
+        "l_L5185g",
+        "l_sub185g",
+        "l_sub_LPF185g",
+        "l_line185g",
+        "L4_g4185g",
+        "h_sub185g",
+        "w_L4185g",
+        "kong0185g",
+        "L4_g2185g",
+        "w_sub185g",
+        "L2_g4185g",
+        "L2_g2185g",
+        "w_L2185g",
+        "kong185G",
+        "kong2185g",
+        "l_line2185g",
+        "copper",
+        "h_down_box185g",
+        "h_up_box185g",
+        "gap_up_box185g",
+        "gap_down_box185g",
+        "l_line112g",
+        "w_line12g",
+        "w_line702g",
+        "delta_cover_HPF185g",
+        "w_lineout185g",
+        "w_L5185g",
+        "w_C4185g",
+        "w_L3185g",
+        "w_C2185g",
+        "w_L1185g",
+        "L2_g1185g",
+        "L7_g3185g",
+        "L7_g4185g",
+        "L4_g1185g",
+        "L2_g3185g",
+        "L4_g3185g"
+      ]
+    },
+    "analysis_setups": [
+      {
+        "name": "Setup1",
+        "properties": [
+          {
+            "key": "ID",
+            "value": "0"
+          },
+          {
+            "key": "SetupType",
+            "value": "'HfssDriven'"
+          },
+          {
+            "key": "SolveType",
+            "value": "'Single'"
+          },
+          {
+            "key": "Frequency",
+            "value": "'18.5GHz'"
+          },
+          {
+            "key": "MaxDeltaS",
+            "value": "0.02"
+          },
+          {
+            "key": "UseMatrixConv",
+            "value": "false"
+          },
+          {
+            "key": "MaximumPasses",
+            "value": "12"
+          },
+          {
+            "key": "MinimumPasses",
+            "value": "1"
+          },
+          {
+            "key": "MinimumConvergedPasses",
+            "value": "1"
+          },
+          {
+            "key": "PercentRefinement",
+            "value": "30"
+          },
+          {
+            "key": "IsEnabled",
+            "value": "true"
+          },
+          {
+            "key": "ImportMesh",
+            "value": "false"
+          },
+          {
+            "key": "BasisOrder",
+            "value": "1"
+          },
+          {
+            "key": "DoLambdaRefine",
+            "value": "true"
+          },
+          {
+            "key": "DoMaterialLambda",
+            "value": "true"
+          },
+          {
+            "key": "SetLambdaTarget",
+            "value": "false"
+          },
+          {
+            "key": "Target",
+            "value": "0.3333"
+          },
+          {
+            "key": "UseMaxTetIncrease",
+            "value": "false"
+          },
+          {
+            "key": "PortAccuracy",
+            "value": "2"
+          },
+          {
+            "key": "UseABCOnPort",
+            "value": "false"
+          },
+          {
+            "key": "SetPortMinMaxTri",
+            "value": "false"
+          },
+          {
+            "key": "PortMinTri",
+            "value": "100"
+          },
+          {
+            "key": "PortMaxTri",
+            "value": "500"
+          },
+          {
+            "key": "UseDomains",
+            "value": "false"
+          },
+          {
+            "key": "UseIterativeSolver",
+            "value": "false"
+          },
+          {
+            "key": "EnhancedLowFreqAccuracy",
+            "value": "false"
+          },
+          {
+            "key": "SaveRadFieldsOnly",
+            "value": "false"
+          },
+          {
+            "key": "SaveAnyFields",
+            "value": "true"
+          },
+          {
+            "key": "IESolverType",
+            "value": "'Auto'"
+          },
+          {
+            "key": "LambdaTargetForIESolver",
+            "value": "0.15"
+          },
+          {
+            "key": "UseDefaultLambdaTgtForIESolver",
+            "value": "true"
+          },
+          {
+            "key": "'IE Solver Accuracy'",
+            "value": "'Balanced'"
+          },
+          {
+            "key": "InfiniteSphereSetup",
+            "value": "-1"
+          },
+          {
+            "key": "NextUniqueID",
+            "value": "1"
+          },
+          {
+            "key": "MoveBackwards",
+            "value": "false"
+          },
+          {
+            "key": "ID",
+            "value": "0"
+          },
+          {
+            "key": "IsEnabled",
+            "value": "true"
+          },
+          {
+            "key": "RangeType",
+            "value": "'LinearCount'"
+          },
+          {
+            "key": "RangeStart",
+            "value": "'5GHz'"
+          },
+          {
+            "key": "RangeEnd",
+            "value": "'35GHz'"
+          },
+          {
+            "key": "RangeCount",
+            "value": "401"
+          },
+          {
+            "key": "Type",
+            "value": "'Interpolating'"
+          },
+          {
+            "key": "SaveFields",
+            "value": "false"
+          },
+          {
+            "key": "SaveRadFields",
+            "value": "false"
+          },
+          {
+            "key": "InterpTolerance",
+            "value": "0.5"
+          },
+          {
+            "key": "InterpMaxSolns",
+            "value": "250"
+          },
+          {
+            "key": "InterpMinSolns",
+            "value": "0"
+          },
+          {
+            "key": "InterpMinSubranges",
+            "value": "1"
+          },
+          {
+            "key": "InterpUseS",
+            "value": "true"
+          },
+          {
+            "key": "InterpUsePortImped",
+            "value": "false"
+          },
+          {
+            "key": "InterpUsePropConst",
+            "value": "true"
+          },
+          {
+            "key": "UseDerivativeConvergence",
+            "value": "false"
+          },
+          {
+            "key": "InterpDerivTolerance",
+            "value": "0.2"
+          },
+          {
+            "key": "UseFullBasis",
+            "value": "true"
+          },
+          {
+            "key": "EnforcePassivity",
+            "value": "true"
+          },
+          {
+            "key": "PassivityErrorTolerance",
+            "value": "0.0001"
+          },
+          {
+            "key": "SMatrixOnlySolveMode",
+            "value": "'Auto'"
+          }
+        ]
+      }
+    ],
+    "optimetrics_setups": []
+  }
+]
