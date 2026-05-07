@@ -2,7 +2,7 @@
   "uid": "087",
   "round": 12,
   "status": "FINAL_BEST_OVERALL",
-  "note": "Best shape: S11 natural, no high-freq peaks, best S31 suppression. S11w=-9.3 is 0.7dB from -10 target but shape preferred over 141.",
+  "note": "087 base + tapper structure (w=0.10mm, h=0.10mm) as new baseline. Tapper has negligible effect on S-params but anchors geometry for future cx/cy position sweep.",
   "parameters": {
     "w_C4185g": 1.15,
     "w_C2185g": 1.05,
@@ -16,13 +16,17 @@
     "l_C4185g": 0.446477,
     "l_L3185g": 0.898752,
     "l_C2185g": 0.504461,
-    "l_L1185g": 0.666816
+    "l_L1185g": 0.666816,
+    "cx": 0.2,
+    "cy": -0.2,
+    "w_tapper": 0.10,
+    "h_tapper": 0.10
   },
   "metrics": {
-    "crossing_GHz": 18.516,
+    "crossing_GHz": 18.530,
     "S31_at_19GHz_dB": -8.1,
     "S31_at_20GHz_dB": -12.3,
-    "ripple_20_25GHz_dB": 0.59,
+    "ripple_20_25GHz_dB": 0.61,
     "S11_worst_19_28GHz_dB": -9.3,
     "avg_S21_20_285_dB": -0.62
   }
