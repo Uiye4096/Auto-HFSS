@@ -130,6 +130,71 @@ Key discoveries (Rounds 9–18):
 Files: `0506185GHzmodel - 副本/final/diplexer_185g_087.aedt`, `.s3p`  
 Optimisation log: `0506185GHzmodel - 副本/TUNING_LOG.md`
 
+## ADS Automation Exploration & Lumped Model Analysis
+
+Explored Keysight ADS (E:\Program Files\Keysight\ADS2024) as a second simulation backend alongside HFSS. Key findings:
+
+### ADS Batch Simulation — Confirmed Working
+
+`hpeesofsim.exe` can run standalone netlist (`.nel`) simulations; `dsdump.exe` parses the binary `.ds` output.
+
+```powershell
+# Minimal env setup (PATH must stay short — all-dirs approach breaks Windows PATH limit)
+$env:HPEESOF_DIR = 'E:\Program Files\Keysight\ADS2024'
+$env:PATH = "$env:HPEESOF_DIR\bin;$env:HPEESOF_DIR\lib;$env:PATH"
+& "$env:HPEESOF_DIR\bin\hpeesofsim.exe" my_netlist.nel
+& "$env:HPEESOF_DIR\bin\dsdump.exe"  my_netlist.ds
+```
+
+**Known limitation**: 3-port S-param simulation crashes (STATUS_NO_MEMORY / `0xC0000017`) in standalone mode — only 2-port supported without full ADS workspace.
+
+### SSL_wrk Diplexer — Extracted Circuit Topology
+
+Reference ADS diplexer workspace at `0506185GHzmodel - 副本/SSL_wrk/`:
+
+| Branch | Topology | Element values (28.5 GHz design) |
+|--------|----------|----------------------------------|
+| **LPF** | series-L / shunt-C T-network (5th order) | L1=L3=0.476 nH, L2=0.710 nH, C1=C2=0.137 pF |
+| **HPF** | series-C / shunt-L (5th order) | C1=0.069 pF, C2=0.058 pF, C3=0.124 pF, L1=0.161 nH, L2=0.185 nH |
+
+Diplexer crossing: **28.50 GHz**, S11 null: **−52 dB** at crossing (LPF.ds dataset).
+
+### Frequency Scaling to 18.5 GHz
+
+Scaling all L and C by `28.5/18.5 = 1.5405`:
+
+| Element | 28.5 GHz | → 18.5 GHz |
+|---------|----------|------------|
+| LPF L1, L3 | 0.476 nH | **0.734 nH** |
+| LPF L2 | 0.710 nH | **1.093 nH** |
+| LPF C1, C2 | 0.137 pF | **0.212 pF** |
+| HPF C1 | 0.069 pF | **0.106 pF** |
+| HPF C2 | 0.058 pF | **0.090 pF** |
+| HPF C3 | 0.124 pF | **0.191 pF** |
+| HPF L1 | 0.161 nH | **0.247 nH** |
+| HPF L2 | 0.185 nH | **0.284 nH** |
+
+Result: HPF −3 dB at **18.4 GHz** ✓, LPF −3 dB at **19.6 GHz** (LPF needs extra ×1.06 to balance), crossing **19.2 GHz** (slight over-shoot; tune LPF scale to ~1.63× instead of 1.54×).
+
+### Lumped Model Insights for HFSS 087 Tuning
+
+Comparing the ideal lumped circuit to the HFSS 087 result reveals the fundamental limits:
+
+**S31@19 GHz = −8.1 dB (target ≤ −10 dB)**
+- A 5th order HPF at 18.5 GHz gives only **~−2 dB attenuation at 19 GHz** (2.7% above cutoff) in the lumped model. HFSS distributed effects add ~6 dB, reaching −8.1 dB.
+- To reach −10 dB: either lower the crossing to ~17.8 GHz (increases 19 GHz separation) or add transmission zeros in the HPF stopband via additional microstrip stubs.
+- Parameter lever: **decreasing `L2_g3185g` below 0.78 mm** shifts crossing higher (more separation to 19 GHz) but risks degrading S31@20 GHz shape.
+
+**S11w = −9.3 dB (target ≤ −10 dB)**
+- The ideal lumped diplexer achieves S11 < −24 dB across the full band. The HFSS gap is explained by the LPF presenting partial impedance to port 1 in the HPF passband (LPF stopband attenuation at 20 GHz is insufficient).
+- Widening `w_C4185g` steepens LPF roll-off → better LPF stopband → better S11 in HPF band.
+- Case 141 (wC4=1.10 mm) confirmed S11w = −10.6 dB but introduced shape degradation at low frequency. The fundamental tension: **steeper LPF roll-off improves S11 but distorts the crossing region**.
+- Practical limit for 087-class topology: **S11w ≈ −9.3 dB** without topology change.
+
+Script: `C:\Temp\ads_test\scale_to_185g.py` (ADS batch simulation + frequency scaling pipeline).
+
+---
+
 ## 185 GHz Optimised Design — Case 037 (Rounds 1–8, superseded)
 
 Previous accepted design over **8 rounds / 51 cases**. Superseded by 087 (better S11, IL).
