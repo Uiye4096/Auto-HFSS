@@ -12,6 +12,7 @@ Automated HFSS diplexer simulation workspace. Shared tools live under `tools/`; 
 | `18Ghzdiplexer/` | Earlier 18 GHz reference copy |
 | `0506185GHzmodel - 副本/` | 185 GHz reference model (baseline analysed) |
 | `SSL_28.5double/` | Reference model used to verify automation path |
+| `SSL_28.5GHzdiplexer/` | 28.5 GHz scaling study — 6 sweep rounds, 70 HFSS cases |
 | `tools/` | Shared utilities (`aedt_inspect.py`, `aedt_ping.py`, …) |
 
 ## Shared Tools
@@ -129,6 +130,44 @@ Key discoveries (Rounds 9–18):
 
 Files: `0506185GHzmodel - 副本/final/diplexer_185g_087.aedt`, `.s3p`  
 Optimisation log: `0506185GHzmodel - 副本/TUNING_LOG.md`
+
+## 28.5 GHz Scaling Study — SSL_28.5GHzdiplexer
+
+Attempt to scale the 18.5 GHz case-087 diplexer to a 28.5 GHz target on the **same H=0.254 mm substrate** (Rogers RO3010). Six sweep rounds, **70 HFSS full-wave cases** total.
+
+### Sweeps summary
+
+| Round | Script | Description | Best main crossing |
+|-------|--------|-------------|--------------------|
+| 1 | `run_285g_sweep1.py` | Naive geometric scale ×0.649 | 21.3 GHz |
+| 2 | `run_285g_sweep2.py` | + Fringing correction on l_C4, l_C2 | **24.7 GHz** |
+| 3 | `run_285g_sweep3.py` | All lengths × 0.80, double-fringing correction | 24.0 GHz |
+| 4 | `run_285g_sweep4.py` | LPF cap-only scan (l_C4 0.07–0.14 mm) | 24.0 GHz |
+| 5 | `run_285g_sweep5.py` | Reduce w_C4 / w_C2 width (0.65–1.05 mm) | 25.7 GHz (spurious) |
+| 6 | `run_285g_sweep6.py` | Freeze LPF (case024), scale HPF only (k=0.75–0.90) | **25.7 GHz** |
+
+### Physical limits found
+
+- **Fringing capacitance dominates**: at 28.5 GHz, w_C4=1.15 mm on H=0.254 mm gives Δl≈0.10 mm/end. Even with l_C4→0, the junction fringing alone caps the LPF cutoff at ~25 GHz.
+- **Independent HPF push insufficient**: pushing HPF cutoff to 28.5 GHz (k≈0.80) gives S21@28.5≈−3 dB, but the LPF is already deep in stopband (S31@28.5≈−12 dB). Gap = 9 dB — cannot close.
+- **Both cutoffs must reach 28.5 GHz simultaneously**, which requires redesigning the LPF topology, not just scaling.
+
+### Conclusion
+
+The 18.5 GHz topology **cannot be scaled to 28.5 GHz** on the same H=0.254 mm substrate via parameter adjustment alone. Maximum clean diplexer crossing achieved: **25.7 GHz** (case 058, k_HPF=0.75, L2=0.36 mm).
+
+Next step: start from `SSL_28.5double/` (native 28.5 GHz topology) or redesign LPF/HPF from ADS lumped prototype at 28.5 GHz.
+
+### Key baselines
+
+| File | Description |
+|------|-------------|
+| `SSL_28.5GHzdiplexer/final/diplexer_285g_baseline.aedt` | Naive ×0.649 scale of 087 |
+| `SSL_28.5GHzdiplexer/final/diplexer_285g_corrected.aedt` | + Fringing correction on l_C4, l_C2 (sweep2 base) |
+| `SSL_28.5GHzdiplexer/final/diplexer_285g_corrected2.aedt` | + Additional ×0.80 on all lengths (sweep3 base) |
+| `SSL_28.5GHzdiplexer/runs/sweep6_manifest.json` | Sweep 6 manifest (best: UID 058) |
+
+---
 
 ## ADS Automation Exploration & Lumped Model Analysis
 

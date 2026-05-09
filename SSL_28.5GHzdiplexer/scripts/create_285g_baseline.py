@@ -107,3 +107,11 @@ if __name__ == "__main__":
         json.dumps(params_out, indent=2), encoding="utf-8"
     )
     print("✓ Wrote parameters.json")
+
+    # Patch Setup1: adaptive frequency 18.5 → 28.5 GHz, sweep 5-30 → 10-60 GHz
+    txt = DST_AEDT.read_text(encoding="utf-8", errors="ignore")
+    txt = txt.replace("Frequency='18.5GHz'", "Frequency='28.5GHz'")
+    txt = txt.replace("RangeStart='5GHz'",   "RangeStart='10GHz'")
+    txt = txt.replace("RangeEnd='30GHz'",     "RangeEnd='60GHz'")
+    DST_AEDT.write_text(txt, encoding="utf-8")
+    print("✓ Patched Setup1: adaptive=28.5GHz, sweep 10-60GHz")

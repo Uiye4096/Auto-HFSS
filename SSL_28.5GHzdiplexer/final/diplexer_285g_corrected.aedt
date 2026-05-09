@@ -281,10 +281,10 @@ $begin 'AnsoftProject'
 			$end 'DesignDatasets'
 			$begin 'Properties'
 				VariableProp('l_line3185g', 'UD', '', '0.604mm')
-				VariableProp('l_C4185g', 'UD', '', '0.289818mm')
+				VariableProp('l_C4185g', 'UD', '', '0.218869mm')
 				VariableProp('l_L3185g', 'UD', '', '0.583400mm')
 				VariableProp('w_line185g', 'UD', '', '0.395mm')
-				VariableProp('l_C2185g', 'UD', '', '0.327457mm')
+				VariableProp('l_C2185g', 'UD', '', '0.257091mm')
 				VariableProp('l_L1185g', 'UD', '', '0.432845mm')
 				VariableProp('l_line4185g', 'UD', '', '1mm')
 				VariableProp('l_L5185g', 'UD', '', '0.451665mm')
