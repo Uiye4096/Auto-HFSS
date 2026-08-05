@@ -1,0 +1,20 @@
+{
+  "hfss": {
+    "aedt_root": "C:/Program Files/AnsysEM/AnsysEM21.2/Win64",
+    "ironpython": "C:/Program Files/AnsysEM/AnsysEM21.2/Win64/common/IronPython/ipy64.exe",
+    "non_graphical": true,
+    "max_parallel": 2
+  },
+  "project": {
+    "project_file": "../path/to/baseline.aedt",
+    "design": "HFSSDesign1",
+    "setup": "Setup1",
+    "sweep": "Sweep",
+    "ports": 3,
+    "output_root": "../runs",
+    "variables": {
+      "length": "1.20mm",
+      "width": "0.40mm"
+    }
+  }
+}
